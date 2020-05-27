@@ -7,7 +7,11 @@ class ChatScreen extends StatelessWidget {
     return Scaffold(
         floatingActionButton: FloatingActionButton(
           child: Icon(Icons.add),
-          onPressed: () {},
+          onPressed: () {
+            Firestore.instance
+                .collection("chats/M01LJtZwNqzYOFhSok82/messages")
+                .add({"text": "added at: ${DateTime.now().toString()}"});
+          },
         ),
         body: StreamBuilder<QuerySnapshot>(
           stream: Firestore.instance
@@ -15,7 +19,9 @@ class ChatScreen extends StatelessWidget {
               .snapshots(),
           builder: (ctx, streamSnapshot) {
             if (streamSnapshot.connectionState == ConnectionState.waiting) {
-              return Center(child: CircularProgressIndicator(),);
+              return Center(
+                child: CircularProgressIndicator(),
+              );
             }
             final documents = streamSnapshot.data.documents;
             return ListView.builder(
