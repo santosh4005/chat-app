@@ -1,3 +1,6 @@
+import 'package:chat_app/widgets/chat/messages.dart';
+import 'package:chat_app/widgets/chat/new_message.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
@@ -5,32 +8,49 @@ class ChatScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        floatingActionButton: FloatingActionButton(
-          child: Icon(Icons.add),
-          onPressed: () {
-            Firestore.instance
-                .collection("chats/M01LJtZwNqzYOFhSok82/messages")
-                .add({"text": "added at: ${DateTime.now().toString()}"});
-          },
+      appBar: AppBar(
+        title: Text("Titties"),
+        actions: <Widget>[
+          DropdownButton(
+            icon: Icon(
+              Icons.more_vert,
+              color: Theme.of(context).primaryIconTheme.color,
+            ),
+            onChanged: (value) {
+              if (value == "logout") {
+                FirebaseAuth.instance.signOut();
+              }
+            },
+            items: [
+              DropdownMenuItem(
+                value: 'logout',
+                child: Container(
+                  child: Row(
+                    children: <Widget>[
+                      Icon(Icons.exit_to_app),
+                      SizedBox(
+                        width: 8,
+                      ),
+                      Text("logout")
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          )
+        ],
+      ),
+       
+      body: Container(
+        child: Column(
+          children: <Widget>[
+            Expanded(
+              child: Messages(),
+            ),
+            NewMessage()
+          ],
         ),
-        body: StreamBuilder<QuerySnapshot>(
-          stream: Firestore.instance
-              .collection("chats/M01LJtZwNqzYOFhSok82/messages")
-              .snapshots(),
-          builder: (ctx, streamSnapshot) {
-            if (streamSnapshot.connectionState == ConnectionState.waiting) {
-              return Center(
-                child: CircularProgressIndicator(),
-              );
-            }
-            final documents = streamSnapshot.data.documents;
-            return ListView.builder(
-                itemCount: documents.length,
-                itemBuilder: (ctx, index) => Container(
-                      padding: EdgeInsets.all(8),
-                      child: Text(documents[index]['text']),
-                    ));
-          },
-        ));
+      ),
+    );
   }
 }
