@@ -41,5 +41,11 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>just to upload profile pic bud</string>
+	<key>NSCameraUsageDescription</key>
+	<string>just to use camera to take a picture for your profile dingis</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>not planning on using it but image uploader is making me do this</string>
 </dict>
 </plist>
